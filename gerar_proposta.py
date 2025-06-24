@@ -2,7 +2,7 @@ from docxtpl import DocxTemplate
 from datetime import datetime
 
 # 1. Carrega o modelo Word corrigido
-doc = DocxTemplate("Orçamento Base Coffee Break Padrão.docx")
+doc = DocxTemplate("orcamento_base.docx")
 
 # 2. Preenche os dados simulados (você vai substituir depois pelo que o agente digitar)
 dados = {
