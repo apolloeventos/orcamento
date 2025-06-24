@@ -28,5 +28,10 @@ def gerar_proposta():
     # Envia o arquivo gerado de volta
     return send_file(nome_arquivo, as_attachment=True)
 
+@app.route('/')
+def home():
+    return 'API do orçamento está no ar! 😎'
+
 if __name__ == "__main__":
     app.run(debug=True)
+
