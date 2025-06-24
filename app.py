@@ -13,7 +13,7 @@ def gerar_proposta():
     dados["data_emissao"] = datetime.today().strftime("%d de %B de %Y")
 
     # Carrega o modelo
-    doc = DocxTemplate("Orçamento Base Coffee Break Padrão.docx")
+    doc = DocxTemplate("orcamento_base.docx")
 
     # Preenche os dados no modelo
     doc.render(dados)
