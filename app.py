@@ -1,37 +1,30 @@
-from flask import Flask, request, send_file
+from flask import Flask, request, jsonify
 from docxtpl import DocxTemplate
 from datetime import datetime
 import os
 
-app = Flask(__name__)
+app = Flask(__name__, static_url_path='/static')
 
 @app.route("/gerar-proposta", methods=["POST"])
 def gerar_proposta():
-    dados = request.json
+    try:
+        dados = request.json
+        dados["data_emissao"] = datetime.today().strftime("%d de %B de %Y")
 
-    # Define a data de emissão
-    dados["data_emissao"] = datetime.today().strftime("%d de %B de %Y")
+        doc = DocxTemplate("orcamento_base.docx")
+        doc.render(dados)
 
-    # Carrega o modelo
-    doc = DocxTemplate("orcamento_base.docx")
+        os.makedirs("static/propostas", exist_ok=True)
 
-    # Preenche os dados no modelo
-    doc.render(dados)
+        nome_arquivo = f"Proposta_{dados['Cliente'].replace(' ', '_')}.docx"
+        caminho_arquivo = os.path.join("static", "propostas", nome_arquivo)
+        doc.save(caminho_arquivo)
 
-    # Garante a pasta de saída
-    os.makedirs("propostas", exist_ok=True)
-
-    # Gera o nome do arquivo com base no cliente
-    nome_arquivo = f"propostas/Proposta_{dados['Cliente'].replace(' ', '_')}.docx"
-    doc.save(nome_arquivo)
-
-    # Envia o arquivo gerado de volta
-    return send_file(
-    nome_arquivo,
-    as_attachment=True,
-    download_name=nome_arquivo.split("/")[-1],
-    mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
-)
+        # Gera URL pública
+        url = f"https://orcamento-us11.onrender.com/static/propostas/{nome_arquivo}"
+        return jsonify({"url": url}), 200
+    except Exception as e:
+        return jsonify({"erro": str(e)}), 500
 
 
 

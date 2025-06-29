@@ -1,8 +1,10 @@
 services:
   - type: web
-    name: orcamento
+    name: propostas-apollo
     env: python
-    plan: starter
     buildCommand: ""
     startCommand: gunicorn app:app
+    envVars:
+      - key: PYTHON_VERSION
+        value: 3.10
 
