@@ -26,6 +26,12 @@ def gerar_proposta():
     doc.save(nome_arquivo)
 
     # Envia o arquivo gerado de volta
-    return send_file(nome_arquivo, as_attachment=True)
+    return send_file(
+    nome_arquivo,
+    as_attachment=True,
+    download_name=nome_arquivo.split("/")[-1],
+    mimetype="application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+)
+
 
 
